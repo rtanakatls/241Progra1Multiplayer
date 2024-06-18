@@ -7,6 +7,9 @@ public class Player : MonoBehaviourPun
 {
     private static GameObject localInstance;
 
+    [SerializeField] private float speed;
+    private Rigidbody rb;
+
     public static GameObject LocalInstance
     {
         get
@@ -15,15 +18,25 @@ public class Player : MonoBehaviourPun
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        if(photonView.IsMine)
+        {
+            localInstance = gameObject;
+        }
+
+        DontDestroyOnLoad(gameObject);
+        rb=GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (!photonView.IsMine || !PhotonNetwork.IsConnected)
+        {
+            return;
+        }
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        rb.velocity = new Vector3(horizontal * speed, rb.velocity.y, vertical * speed);
     }
 }
