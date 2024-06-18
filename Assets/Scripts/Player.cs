@@ -24,7 +24,8 @@ public class Player : MonoBehaviourPun
         {
             localInstance = gameObject;
         }
-
+        float scale = Random.Range(1f, 5f);
+        transform.localScale=Vector3.one*scale;
         DontDestroyOnLoad(gameObject);
         rb=GetComponent<Rigidbody>();
     }
